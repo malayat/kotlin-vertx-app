@@ -27,9 +27,9 @@ repositories {
 }
 
 dependencies {
-    //compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     // kotlin
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    //compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     // funKTionale: Functional constructs and patterns for Kotlin
@@ -44,6 +44,8 @@ dependencies {
     compile "org.slf4j:slf4j-api:$slf4j_version"
     //vertx router
     compile "io.vertx:vertx-web:$vertx_version"
+    //Themeleaf: Rendering templates
+    compile "io.vertx:vertx-web-templ-thymeleaf:$vertx_version"
 }
 
 mainClassName = "HelloVertx"
