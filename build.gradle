@@ -1,0 +1,54 @@
+buildscript {
+    ext.kotlin_version = '1.2.41'
+    ext.shadow_version = '2.0.4'
+    ext.funKTionale_version = '1.2'
+    ext.kovenant_version = '3.3.0'
+    ext.vertx_version = '3.5.1'
+    ext.slf4j_version = '1.7.25'
+
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version",
+                "com.github.jengelman.gradle.plugins:shadow:$shadow_version"
+    }
+}
+
+group 'ec.solmedia.kotlin.vertx.app'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'kotlin'
+apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    //compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    // kotlin
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+
+    // funKTionale: Functional constructs and patterns for Kotlin
+    compile "org.funktionale:funktionale-all:$funKTionale_version"
+
+    // Kovenant: Promises for Kotlin
+    compile "nl.komponents.kovenant:kovenant:$kovenant_version"
+
+    //vertex and slf4j
+    compile "io.vertx:vertx-core:$vertx_version"
+    runtime "org.slf4j:slf4j-jdk14:$slf4j_version"
+    compile "org.slf4j:slf4j-api:$slf4j_version"
+}
+
+mainClassName = "HelloVertx"
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
