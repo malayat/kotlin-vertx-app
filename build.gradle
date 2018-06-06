@@ -42,6 +42,8 @@ dependencies {
     compile "io.vertx:vertx-core:$vertx_version"
     runtime "org.slf4j:slf4j-jdk14:$slf4j_version"
     compile "org.slf4j:slf4j-api:$slf4j_version"
+    //vertx router
+    compile "io.vertx:vertx-web:$vertx_version"
 }
 
 mainClassName = "HelloVertx"
