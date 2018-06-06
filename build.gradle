@@ -48,7 +48,7 @@ dependencies {
     compile "io.vertx:vertx-web-templ-thymeleaf:$vertx_version"
 }
 
-mainClassName = "HelloVertx"
+mainClassName = "HelloVertxKt"
 
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
