@@ -5,6 +5,8 @@ buildscript {
     ext.kovenant_version = '3.3.0'
     ext.vertx_version = '3.5.1'
     ext.slf4j_version = '1.7.25'
+    ext.fuel_version = '1.13.0'
+    ext.klutter_version = '2.5.3'
 
     repositories {
         jcenter()
@@ -28,8 +30,8 @@ repositories {
 
 dependencies {
     // kotlin
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    //compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    //compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
 
     // funKTionale: Functional constructs and patterns for Kotlin
@@ -38,17 +40,32 @@ dependencies {
     // Kovenant: Promises for Kotlin
     compile "nl.komponents.kovenant:kovenant:$kovenant_version"
 
-    //vertex and slf4j
+    // vertex and slf4j
     compile "io.vertx:vertx-core:$vertx_version"
     runtime "org.slf4j:slf4j-jdk14:$slf4j_version"
     compile "org.slf4j:slf4j-api:$slf4j_version"
-    //vertx router
+    // vertx router
     compile "io.vertx:vertx-web:$vertx_version"
-    //Themeleaf: Rendering templates
+    // Themeleaf: Rendering templates
     compile "io.vertx:vertx-web-templ-thymeleaf:$vertx_version"
+
+    // klutter: Vert.x-3 helpers and integration with Kovenant Promises
+    compile "uy.kohesive.klutter:klutter-vertx3:$klutter_version"
+
+    // Fuel: The easiest HTTP networking library for Kotlin/Android
+    compile "com.github.kittinunf.fuel:fuel:$fuel_version"
+    compile "com.github.kittinunf.fuel:fuel-moshi:$fuel_version"
 }
 
-mainClassName = "HelloVertxKt"
+mainClassName = "io.vertx.core.Launcher"
+def mainVerticleName = 'verticles.MainVerticle'
+def watchForChange = 'src/**/*.kt'
+def doOnChange = 'gradle classes'
+
+run {
+    args = ['run', mainVerticleName, "--redeploy=$watchForChange",
+            "--launcher-class=$mainClassName", "--on-redeploy=$doOnChange"]
+}
 
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
