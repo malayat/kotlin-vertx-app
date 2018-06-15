@@ -1,13 +1,13 @@
 buildscript {
-    ext.kotlin_version = '1.2.41'
-    ext.shadow_version = '2.0.4'
-    ext.funKTionale_version = '1.2'
-    ext.kovenant_version = '3.3.0'
-    ext.vertx_version = '3.5.1'
-    ext.slf4j_version = '1.7.25'
-    ext.fuel_version = '1.13.0'
-    ext.klutter_version = '2.5.3'
-
+    ext {
+        kotlin_version = '1.2.41'
+        shadow_version = '2.0.4'
+        kovenant_version = '3.3.0'
+        vertx_version = '3.5.1'
+        slf4j_version = '1.7.25'
+        fuel_version = '1.13.0'
+        moshi_version = '1.6.0'
+    }
     repositories {
         jcenter()
     }
@@ -17,12 +17,13 @@ buildscript {
     }
 }
 
-group 'ec.solmedia.kotlin.vertx.app'
-version '1.0-SNAPSHOT'
+group = 'ec.solmedia.kotlin.vertx.app'
+version = '1.0-SNAPSHOT'
 
 apply plugin: 'kotlin'
 apply plugin: 'application'
 apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'kotlin-kapt'
 
 repositories {
     jcenter()
@@ -30,12 +31,7 @@ repositories {
 
 dependencies {
     // kotlin
-    //compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-
-    // funKTionale: Functional constructs and patterns for Kotlin
-    compile "org.funktionale:funktionale-all:$funKTionale_version"
 
     // Kovenant: Promises for Kotlin
     compile "nl.komponents.kovenant:kovenant:$kovenant_version"
@@ -49,12 +45,12 @@ dependencies {
     // Themeleaf: Rendering templates
     compile "io.vertx:vertx-web-templ-thymeleaf:$vertx_version"
 
-    // klutter: Vert.x-3 helpers and integration with Kovenant Promises
-    compile "uy.kohesive.klutter:klutter-vertx3:$klutter_version"
-
     // Fuel: The easiest HTTP networking library for Kotlin/Android
     compile "com.github.kittinunf.fuel:fuel:$fuel_version"
-    compile "com.github.kittinunf.fuel:fuel-moshi:$fuel_version"
+
+    // Moshi: Modern JSON library with kotlin codegen
+    compile "com.squareup.moshi:moshi:$moshi_version"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
 }
 
 mainClassName = "io.vertx.core.Launcher"
