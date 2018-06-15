@@ -1,23 +1,15 @@
 package verticles
 
-import com.github.kittinunf.fuel.core.FuelManager
-import com.github.kittinunf.fuel.httpGet
-import extensions.defaultDeserializerOf
-import extensions.sunSetDeserializerOf
 import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
 import io.vertx.core.Vertx
 import io.vertx.ext.web.Router
 import io.vertx.ext.web.templ.ThymeleafTemplateEngine
-import model.SunModel
-import model.SunSetWeatherInfo
-import model.WeatherResult
+import model.SunWeatherInfo
 import nl.komponents.kovenant.functional.bind
 import nl.komponents.kovenant.functional.map
-import nl.komponents.kovenant.task
 import org.slf4j.LoggerFactory
-import java.net.InetSocketAddress
-import java.net.Proxy
+import services.Services
 
 class MainVerticle : AbstractVerticle() {
 
@@ -28,33 +20,21 @@ class MainVerticle : AbstractVerticle() {
         val logger = LoggerFactory.getLogger("VertxServer")
         val templateEngine = ThymeleafTemplateEngine.create()
 
-        var addr = InetSocketAddress("2k_uio2.sri.ad", 8002)
-        FuelManager.instance.proxy = Proxy(Proxy.Type.HTTP, addr)
-
         router.get("/").handler { ctx ->
 
-            val sunSetPromise = task {
-                val url = "http://api.sunrise-sunset.org/json?lat=-0.2166667&lng=-78.5&formatted=0"
-                val (_, _, result) = url.httpGet().responseObject(sunSetDeserializerOf<SunModel>())
-                result.component1()
-            }
+            val sunPromise = Services.getSunInfo(-0.2166667, -78.5)
 
-            val weatherPromise = task {
-                val url =
-                    "http://api.openweathermap.org/data/2.5/weather?id=3651857&units=metric&appid=15646a06818f61f7b8d7823ca833e1ce"
-                val (_, _, result) = url.httpGet().responseObject(defaultDeserializerOf<WeatherResult>())
-                result.component1()
-            }
+            val weatherPromise = Services.getWeatherInfo(3651857)
 
-            val sunsetWeatherInfo = sunSetPromise.bind { sunset ->
+            val sunWeatherInfo = sunPromise.bind { sun ->
                 weatherPromise.map { weather ->
-                    SunSetWeatherInfo(sunset, weather)
+                    SunWeatherInfo(sun, weather)
                 }
             }
 
-            sunsetWeatherInfo.success {
-                ctx.put("sunrise", it.sunsetModel?.sunrise)
-                ctx.put("sunset", it.sunsetModel?.sunset)
+            sunWeatherInfo.success {
+                ctx.put("sunrise", it.sunModel?.sunrise)
+                ctx.put("sunset", it.sunModel?.sunset)
                 ctx.put("temp", it.weatherResult?.main?.temp)
                 templateEngine.render(ctx, "public/templates/", "index.html") { buf ->
                     if (buf.failed()) {
@@ -63,6 +43,11 @@ class MainVerticle : AbstractVerticle() {
                         ctx.response().end(buf.result())
                     }
                 }
+            }
+
+            sunWeatherInfo.fail {
+                logger.error("Remote server querying failed", it)
+
             }
         }
 

@@ -7,7 +7,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 
-data class SunSetResult(val results: Results?, val status: String)
+data class SunResult(val results: Results?, val status: String)
 
 data class Results(
     val sunrise: String?,
@@ -22,18 +22,18 @@ data class Results(
     @Json(name = "astronomical_twilight_end") val astronomicalTwilightEnd: String
 )
 
-
-class SunSetAdapter {
+class SunAdapter {
 
     companion object {
-        val formatter = DateTimeFormatter.ofPattern("HH:mm:ss").withZone(ZoneId.of("America/Guayaquil"))
+        val formatter: DateTimeFormatter =
+            DateTimeFormatter.ofPattern("HH:mm:ss").withZone(ZoneId.of("America/Guayaquil"))
     }
 
     @FromJson
-    fun sunSetFromJson(sunSet: SunSetResult?): SunModel {
+    fun sunFromJson(sunResult: SunResult?): SunModel {
         return SunModel(
-            ZonedDateTime.parse(sunSet?.results?.sunrise).format(formatter),
-            ZonedDateTime.parse(sunSet?.results?.sunset).format(formatter)
+            ZonedDateTime.parse(sunResult?.results?.sunrise).format(formatter),
+            ZonedDateTime.parse(sunResult?.results?.sunset).format(formatter)
         )
     }
 }
