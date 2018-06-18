@@ -4,6 +4,7 @@ import io.vertx.core.AbstractVerticle
 import io.vertx.core.Future
 import io.vertx.core.Vertx
 import io.vertx.ext.web.Router
+import io.vertx.ext.web.handler.StaticHandler
 import io.vertx.ext.web.templ.ThymeleafTemplateEngine
 import model.SunWeatherInfo
 import nl.komponents.kovenant.functional.bind
@@ -20,7 +21,10 @@ class MainVerticle : AbstractVerticle() {
         val logger = LoggerFactory.getLogger("VertxServer")
         val templateEngine = ThymeleafTemplateEngine.create()
 
-        router.get("/").handler { ctx ->
+        val staticHandler = StaticHandler.create().setWebRoot("public").setCachingEnabled(false)
+        router.route("/public/*").handler(staticHandler)
+
+        router.get("/home").handler { ctx ->
 
             val sunPromise = Services.getSunInfo(-0.2166667, -78.5)
 
@@ -47,7 +51,6 @@ class MainVerticle : AbstractVerticle() {
 
             sunWeatherInfo.fail {
                 logger.error("Remote server querying failed", it)
-
             }
         }
 
