@@ -7,6 +7,7 @@ buildscript {
         slf4j_version = '1.7.25'
         fuel_version = '1.13.0'
         moshi_version = '1.6.0'
+        kotson_version = '2.5.0'
     }
     repositories {
         jcenter()
@@ -51,6 +52,9 @@ dependencies {
     // Moshi: Modern JSON library with kotlin codegen
     compile "com.squareup.moshi:moshi:$moshi_version"
     kapt "com.squareup.moshi:moshi-kotlin-codegen:$moshi_version"
+
+    // Kotson: Syntactic sugars to Gson in Kotlin
+    compile "com.github.salomonbrys.kotson:kotson:$kotson_version"
 }
 
 mainClassName = "io.vertx.core.Launcher"
