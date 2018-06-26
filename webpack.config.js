@@ -8,8 +8,11 @@ module.exports = {
             {
                 test: /\.jsx?$/, loader: 'babel-loader',
                 include: /ui/, query: {presets: ['env', 'stage-0', 'react']}
-            }
 
+            },
+            {
+                test: /\.scss$/, loaders: ["style", "css", "sass"]
+            }
         ]
     }
 };
